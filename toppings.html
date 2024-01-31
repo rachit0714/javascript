@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Order Pizza</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" 
+    integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <style>
+        .selected {
+            background-color: green;
+        }
+    </style>
+    <script>
+        let toppings = {"Pepperoni": false, "Chicken": false, "Olives": false, "Mushrooms": false}
+        let size = "small";
+        num_of_toppings = 0;
+
+        function updatePizzaSize() {
+            size = document.getElementById("size").value;
+            console.log(size);
+        }
+        // Javascript can be written in the header, body or another file
+        function addTopping(top) {
+            toppings[top] = !toppings[top];
+            let button = document.getElementById(top);
+            button.classList.toggle("selected", toppings[top]);
+            num_of_toppings += toppings[top] ? 1 : -1;
+        }
+        function clearToppings() {
+            num_of_toppings = 0
+            for (let topping in toppings){
+                toppings[topping] = false
+                let button = document.getElementById(topping);
+                button.classList.remove("selected");
+            }
+        }
+        function order() {
+            let all_toppings = "";
+            for (let t in toppings){
+                if (toppings[t] == true) {
+                    all_toppings += t + ', ';
+                }
+            }
+            if (num_of_toppings == 0) {
+                document.getElementById("Order").innerHTML = "You have ordered a " + size + " cheese pizza.";
+            }
+            else if (num_of_toppings > 1){
+                let toppings_arr = all_toppings.slice(0, -2).split(', ');
+                all_toppings = toppings_arr.slice(0, -1).join(', ') + " and " + toppings_arr[toppings_arr.length - 1];
+                document.getElementById("Order").innerHTML = "You have ordered a " + size + " with " + all_toppings;
+            }
+            else {
+                document.getElementById("Order").innerHTML = "You have ordered a " + size + " pizza with " + all_toppings.slice(0, -2) + "."
+            }
+            clearToppings()
+        }
+
+    </script>
+  </head>
+  <body>
+    <div class="container">
+        <h1> Choose your toppings </h1>
+        <h2>Non-Veg</h2>
+        <button id="Pepperoni" type="button" onclick="addTopping('Pepperoni')"> Pepperoni </Button>
+        <button id="Chicken" type="button" onclick="addTopping('Chicken')"> Chicken </Button>
+        </br>
+        </br>
+        <h2> Veg </h2>
+        <button id="Olives" type="button" onclick="addTopping('Olives')"> Olives </Button>
+        <button id="Mushrooms" type="button" onclick="addTopping('Mushrooms')"> Mushrooms </Button>
+    </div>
+    </br>
+     <div class="container">
+        <!-- Lets the user select the size of their pizza -->
+        <label for="pizzaSize">Select Pizza Size:</label>
+        <select id="size" onchange="updatePizzaSize()">
+            <option value="small">Small</option>
+            <option value="medium">Medium</option>
+            <option value="large">Large</option>
+        </select>
+     </div>
+
+    <div class="container">
+        <button type="Submit" onclick="clearToppings()"> Clear </Button>
+        <button type="Submit" onclick="order()"> Order </Button>
+    </div>
+
+    <div class="container"> 
+        <p id="Order"> Click order to see what you have got </p>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" 
+    integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" 
+    crossorigin="anonymous"></script>
+  </body>
+</html>
